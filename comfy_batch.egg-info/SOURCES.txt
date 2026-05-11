@@ -1,9 +1,0 @@
-LICENSE
-README.md
-pyproject.toml
-comfy_batch/__init__.py
-comfy_batch.egg-info/PKG-INFO
-comfy_batch.egg-info/SOURCES.txt
-comfy_batch.egg-info/dependency_links.txt
-comfy_batch.egg-info/requires.txt
-comfy_batch.egg-info/top_level.txt
