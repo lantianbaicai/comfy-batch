@@ -97,7 +97,7 @@ class ZImage:
 
         Args:
             prompts: A single prompt string or list of prompt strings.
-            output_dir: Directory to save images. If None, saves to ComfyUI output dir.
+            output_dir: Directory to save images. Default: E:\opc-work\comfy_output\YYYY-MM-DD\
             **kwargs: Override any init parameter (steps, cfg, width, height, etc.)
 
         Returns:
@@ -105,6 +105,11 @@ class ZImage:
         """
         if isinstance(prompts, str):
             prompts = [prompts]
+
+        # Default output dir
+        if output_dir is None:
+            from datetime import date
+            output_dir = os.path.join(r'E:\opc-work', 'comfy_output', date.today().isoformat())
 
         # Apply kwargs overrides
         for k, v in kwargs.items():
@@ -122,11 +127,8 @@ class ZImage:
                 img_url = f"http://{self.host}/view?filename={fname}&subfolder={sub}&type=output"
                 img_data = requests.get(img_url, timeout=30).content
 
-                if output_dir:
-                    os.makedirs(output_dir, exist_ok=True)
-                    out_path = os.path.join(output_dir, fname)
-                else:
-                    out_path = fname
+                os.makedirs(output_dir, exist_ok=True)
+                out_path = os.path.join(output_dir, fname)
 
                 with open(out_path, "wb") as f:
                     f.write(img_data)

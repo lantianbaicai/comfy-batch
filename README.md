@@ -1,10 +1,11 @@
 # ComfyBatch 🎨
 
-> **一行代码，批量出图。** 把 ComfyUI 从拖节点变成写代码。
+> **一行代码，批量出图。** ComfyUI Z-Image Turbo 的 Python SDK。双采样已内置。
 
 [![Stars](https://img.shields.io/github/stars/lantianbaicai/comfy-batch?style=flat)](https://github.com/lantianbaicai/comfy-batch)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
+[![Z-Image](https://img.shields.io/badge/model-Z--Image%20Turbo-orange)](https://comfy.org)
 
 ---
 
@@ -94,6 +95,43 @@ z = ZImage(host="192.168.1.100:8000")
 ```bash
 python -m comfy_batch "a beautiful sunset over mountains"
 python -m comfy_batch "prompt1" "prompt2" "prompt3"
+```
+
+---
+
+## 双采样模式 🚀
+
+内置双采样：第一遍低分辨率生成结构 → 放大 → 第二遍高分辨率补充细节。
+
+```python
+z = ZImage()
+
+# 双采样：768x1024 结构 → 1024x1536 细节
+z.generate("prompt", double_sample=True)
+
+# 自定义双采样参数
+z.generate("prompt", double_sample=True, 
+           first_size=(640, 896), final_size=(1024, 1440),
+           first_steps=6, refine_steps=4, denoise=0.35)
+```
+
+| 模式 | 出图时间 | 质量 | 适用场景 |
+|------|------|------|------|
+| 普通 | ~25s | 好 | 快速预览、批量 |
+| 双采样 | ~45s | 更好 | 高质量产出、纹理细节 |
+
+---
+
+## 已验证的提示词模板
+
+配套模板包见 [comfyui-hanfu-prompts](https://github.com/lantianbaicai/comfyui-hanfu-prompts)：
+
+```python
+from prompt_templates import HANFU_TANG, WKW_MOOD, MAG_VOGUE
+
+z.generate(HANFU_TANG, double_sample=True)   # 唐风仕女
+z.generate(WKW_MOOD, double_sample=True)     # 王家卫花样年华
+z.generate(MAG_VOGUE, double_sample=True)    # VOGUE杂志封面
 ```
 
 ---
